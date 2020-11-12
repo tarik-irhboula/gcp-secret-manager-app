@@ -1,0 +1,347 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "version": "1.3.0",
+        "title": "Secret Manager",
+        "description": "Manage the secrets of your GCP project",
+        "contact": {
+            "name": "Tarik Irhboula",
+            "email": "tarik.irhboula@gmail.com"
+        }
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8080/",
+            "description": "Local server"
+        }
+    ],
+    "tags": [
+        {
+            "name": "CRUD secrets"
+        }
+    ],
+    "paths": {
+        "/secrets": {
+            "get": {
+                "tags": [
+                    "CRUD secrets"
+                ],
+                "description": "Get secrets",
+                "operationId": "getSecrets",
+                "responses": {
+                    "200": {
+                        "description": "Secrets were obtained",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Secrets"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unable to retrieve secrets from project",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "message": "Unable to retrieve secrets from project."
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "CRUD secrets"
+                ],
+                "description": "Create secret",
+                "operationId": "createSecret",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "description": "Secret name"
+                                    },
+                                    "value": {
+                                        "type": "string",
+                                        "description": "Secret payload"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Secret was created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Secret"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid secret",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "message": "Invalid secret input."
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unable to create secret in project",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "message": "Unable to create secret in project."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/secrets/{name}": {
+            "get": {
+                "tags": [
+                    "CRUD secrets"
+                ],
+                "description": "Get secret",
+                "operationId": "getSecret",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "Secret name"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Secret was obtained",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Secret"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Secret not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "message": "Secret not found."
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Secret name required",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "message": "Secret name is required."
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "CRUD secrets"
+                ],
+                "description": "Update secret",
+                "operationId": "updateSecret",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "Secret name"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "value": {
+                                        "type": "string",
+                                        "description": "Secret payload"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Secret was updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Secret"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid secret name or value",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "name": {
+                                        "message": "Secret name is required."
+                                    },
+                                    "value": {
+                                        "message": "Invalid secret value."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unable to update secret in project",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "message": "Unable to update secret in project."
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "CRUD secrets"
+                ],
+                "description": "Delete secret",
+                "operationId": "deleteSecret",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "Secret name"
+                    }
+                ],
+                "responses": {
+                    "204'": {
+                        "description": "Secret was deleted"
+                    },
+                    "400": {
+                        "description": "Secret name required",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "message": "Secret name is required."
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unable to delete secret in project",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "message": "Unable to delete secret in project."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Secrets": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/Secret"
+                }
+            },
+            "Secret": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "Secret basename"
+                    },
+                    "value": {
+                        "type": "string",
+                        "description": "Secret payload"
+                    },
+                    "_fullname": {
+                        "type": "string",
+                        "description": "Secret fullname",
+                        "example": "project/XXXXXX/secrets/XXXXXX"
+                    },
+                    "_version": {
+                        "type": "string",
+                        "description": "Secret last version (fullname)",
+                        "example": "project/XXXXXX/secrets/XXXXXX/versions/X"
+                    }
+                }
+            },
+            "Error": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}

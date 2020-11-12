@@ -3,14 +3,16 @@ import swaggerUi from "swagger-ui-express";
 import bodyParser from "body-parser";
 import morgan from "morgan";
 
-import { accessLogStream } from './logger';
+import { accessLogStream, logger } from './logger';
 import { SecretManager } from './manager';
 
 import schema from "./schema.json";
 
-const projectId = process.argv[2];
+const projectId = process.env.PROJECT_ID;
 if (!projectId) {
-    console.error("Error : GCP project required")
+    console.error("Error : GCP project required") 
+    logger.error("Error : GCP project required")
+    process.exit()
 }
 
 const manager = new SecretManager(projectId);

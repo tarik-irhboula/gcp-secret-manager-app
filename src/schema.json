@@ -9,12 +9,6 @@
             "email": "tarik.irhboula@gmail.com"
         }
     },
-    "servers": [
-        {
-            "url": "http://localhost:8080/",
-            "description": "Local server"
-        }
-    ],
     "tags": [
         {
             "name": "CRUD secrets"
